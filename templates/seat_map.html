@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>座位情况</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .seat-table { table-layout: fixed; }
+    .seat-table td { height: 90px; vertical-align: top; border: 1px solid #ced4da; }
+    .seat-no { font-size: 0.85rem; color: #6c757d; }
+    .seat-student { font-weight: 600; }
+    .empty-seat { background: #f8f9fa; }
+    .aisle-right { border-right: 4px solid #495057 !important; }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3 class="mb-0">机房座位情况</h3>
+    <a href="/teacher" class="btn btn-outline-secondary">返回教师端</a>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table seat-table mb-0 text-center">
+          <tbody>
+          {% for row in seat_grid %}
+            <tr>
+              {% for seat in row %}
+                <td class="{% if seat.seat_no is none %}empty-seat{% endif %} {% if loop.index in [2,4,6] %}aisle-right{% endif %}">
+                  {% if seat.seat_no is not none %}
+                    <div class="seat-no">#{{ seat.label }}</div>
+                    {% if seat.students %}
+                      {% for stu in seat.students %}
+                        <div class="seat-student">{{ stu }}</div>
+                      {% endfor %}
+                    {% endif %}
+                  {% endif %}
+                </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <p class="text-muted mt-3 mb-0">说明：根据已签到学生 IP 最后一段与座位编号匹配。</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>
